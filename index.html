@@ -153,6 +153,8 @@
             flex-direction: column; /* จัดเรียงองค์ประกอบในแนวดิ่ง */
             align-items: center; /* จัดตรงกลางแนวนอน */
             gap: 20px; /* ระยะห่างระหว่างองค์ประกอบ */
+            max-width: 600px; /* จำกัดขนาดคอนเทนเนอร์ */
+            margin: 0 auto; /* จัดกลางแนวนอน */
         }
         .loading-text {
             font-size: 24px;
@@ -202,13 +204,12 @@
             display: flex; /* เรียงแนวนอน */
             gap: 20px; /* ระยะห่างระหว่างรูปภาพและวิดีโอ */
             margin-bottom: 20px; /* ระยะห่างจากข้อความและปุ่ม */
-            width: 80%; /* จำกัดขนาดคอนเทนเนอร์ */
-            max-width: 800px; /* ขนาดสูงสุด */
+            max-width: 800px; /* จำกัดขนาดคอนเทนเนอร์ */
             margin: 0 auto; /* จัดกลางแนวนอน */
         }
         .hbd-image,
         .hbd-video {
-            width: 100%; /* ปรับขนาดตามคอนเทนเนอร์ */
+            width: 80%; /* ขนาดตามสัดส่วนของหน้าจอ */
             max-width: 400px; /* ขนาดสูงสุด */
             height: auto; /* ให้ความสูงปรับตามสัดส่วน */
             object-fit: cover; /* ครอบคลุมพื้นที่โดยไม่บิดเบือน */
@@ -257,6 +258,14 @@
             width: 15px;
             height: 15px;
             fill: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .loading-video, .hbd-video {
+                width: 90%; /* ขยายขนาดให้เหมาะสมกับหน้าจอมือถือ */
+                max-width: 300px; /* ลดขนาดสูงสุดลง */
+            }
         }
     </style>
 </head>
