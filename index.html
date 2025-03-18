@@ -209,8 +209,8 @@
         }
         .hbd-image,
         .hbd-video {
-            width: 80%; /* ขนาดตามสัดส่วนของหน้าจอ */
-            max-width: 400px; /* ขนาดสูงสุด */
+            width: 80%; /* ขนาดของรูปภาพและวิดีโอ */
+            max-width: 400px; /* กำหนดขนาดสูงสุด */
             height: auto; /* ให้ความสูงปรับตามสัดส่วน */
             object-fit: cover; /* ครอบคลุมพื้นที่โดยไม่บิดเบือน */
             border-radius: 10px; /* ขอบมน */
@@ -262,7 +262,7 @@
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .loading-video, .hbd-video {
+            .loading-video, .hbd-video, .hbd-image {
                 width: 90%; /* ขยายขนาดให้เหมาะสมกับหน้าจอมือถือ */
                 max-width: 300px; /* ลดขนาดสูงสุดลง */
             }
@@ -414,21 +414,31 @@
             isPlaying = !isPlaying;
         }
 
-        // เพิ่ม JavaScript เพื่อปรับขนาดวิดีโอแบบไดนามิก
-        function adjustVideoSize() {
+        // เพิ่ม JavaScript เพื่อปรับขนาดวิดีโอและรูปภาพแบบไดนามิก
+        function adjustMediaSize() {
             const videos = document.querySelectorAll('.loading-video, .hbd-video');
+            const images = document.querySelectorAll('.hbd-image');
+
+            // ปรับขนาดวิดีโอ
             videos.forEach(video => {
                 video.style.width = '80%'; // ปรับขนาดตามความต้องการ
                 video.style.maxWidth = '400px';
                 video.style.height = 'auto';
             });
+
+            // ปรับขนาดรูปภาพ
+            images.forEach(image => {
+                image.style.width = '80%'; // ปรับขนาดตามความต้องการ
+                image.style.maxWidth = '400px';
+                image.style.height = 'auto';
+            });
         }
 
         // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
-        window.addEventListener('load', adjustVideoSize);
+        window.addEventListener('load', adjustMediaSize);
 
         // เรียกใช้ฟังก์ชันเมื่อขนาดหน้าจอเปลี่ยนแปลง
-        window.addEventListener('resize', adjustVideoSize);
+        window.addEventListener('resize', adjustMediaSize);
     </script>
 </body>
 </html>
