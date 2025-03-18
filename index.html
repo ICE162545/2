@@ -180,6 +180,8 @@
             height: auto; /* ให้ความสูงปรับตามสัดส่วน */
             object-fit: cover; /* ครอบคลุมพื้นที่โดยไม่บิดเบือน */
             border-radius: 10px; /* เพิ่มขอบมน */
+            display: block; /* ป้องกันการจัดวางผิดตำแหน่ง */
+            margin: 0 auto; /* จัดกลางแนวนอน */
         }
         /* ส่วนของหน้า Happy Birthday */
         .hbd-page {
@@ -200,14 +202,19 @@
             display: flex; /* เรียงแนวนอน */
             gap: 20px; /* ระยะห่างระหว่างรูปภาพและวิดีโอ */
             margin-bottom: 20px; /* ระยะห่างจากข้อความและปุ่ม */
+            width: 80%; /* จำกัดขนาดคอนเทนเนอร์ */
+            max-width: 800px; /* ขนาดสูงสุด */
+            margin: 0 auto; /* จัดกลางแนวนอน */
         }
         .hbd-image,
         .hbd-video {
-            width: 80%; /* ขนาดของรูปภาพและวิดีโอ */
-            max-width: 400px; /* กำหนดขนาดสูงสุด */
+            width: 100%; /* ปรับขนาดตามคอนเทนเนอร์ */
+            max-width: 400px; /* ขนาดสูงสุด */
             height: auto; /* ให้ความสูงปรับตามสัดส่วน */
             object-fit: cover; /* ครอบคลุมพื้นที่โดยไม่บิดเบือน */
             border-radius: 10px; /* ขอบมน */
+            display: block; /* ป้องกันการจัดวางผิดตำแหน่ง */
+            margin: 0 auto; /* จัดกลางแนวนอน */
         }
         .hbd-text {
             font-size: 28px;
@@ -397,6 +404,22 @@
             }
             isPlaying = !isPlaying;
         }
+
+        // เพิ่ม JavaScript เพื่อปรับขนาดวิดีโอแบบไดนามิก
+        function adjustVideoSize() {
+            const videos = document.querySelectorAll('.loading-video, .hbd-video');
+            videos.forEach(video => {
+                video.style.width = '80%'; // ปรับขนาดตามความต้องการ
+                video.style.maxWidth = '400px';
+                video.style.height = 'auto';
+            });
+        }
+
+        // เรียกใช้ฟังก์ชันเมื่อหน้าเว็บโหลดเสร็จ
+        window.addEventListener('load', adjustVideoSize);
+
+        // เรียกใช้ฟังก์ชันเมื่อขนาดหน้าจอเปลี่ยนแปลง
+        window.addEventListener('resize', adjustVideoSize);
     </script>
 </body>
 </html>
