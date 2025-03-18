@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* การตั้งค่าเบื้องต้น */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Comic Sans MS', cursive, sans-serif; /* ฟอนต์น่ารัก */
+        }
+        body {
+            background: linear-gradient(135deg, #ffe6f2, #f3e6ff); /* สีไล่โทนชมพูและม่วงอ่อน */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* ซ่อนเอฟเฟกต์ที่เกินขอบจอ */
+            position: relative;
+        }
+        /* เอฟเฟกต์วงกลมเคลื่อนไหวบนพื้นหลัง */
+        .background-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+            animation: float 10s infinite ease-in-out alternate;
+        }
+        .circle-1 {
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 182, 193, 0.5); /* สีชมพูใส */
+            top: 10%;
+            left: 20%;
+        }
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(173, 216, 230, 0.5); /* สีฟ้าใส */
+            bottom: 10%;
+            right: 20%;
+        }
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+            100% {
+                transform: translateY(-20px);
+            }
+        }
+        /* รูปภาพพื้นหลัง */
+        .background-bear {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 300px; /* ปรับขนาดตามความเหมาะสม */
+            opacity: 0.8; /* ทำให้รูปใสเล็กน้อย */
+            z-index: 0; /* อยู่ใต้หน้าล็อกอิน */
+        }
+        /* ส่วนของหน้าล็อกอิน */
+        .login-container {
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            padding: 30px;
+            text-align: center;
+            z-index: 1; /* ให้อยู่เหนือพื้นหลัง */
+            position: relative;
+        }
+        .login-box h2 {
+            color: #ff69b4; /* สีชมพูเข้ม */
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .login-box p {
+            color: #ff69b4;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .input-group label {
+            display: block;
+            color: #ff69b4;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ff69b4;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus {
+            border-color: #ff1493; /* สีชมพูเข้มขึ้นเมื่อโฟกัส */
+        }
+        .login-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #ff69b4;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .login-btn:hover {
+            background-color: #ff1493; /* สีชมพูเข้มขึ้นเมื่อ hover */
+        }
+        .forgot-password {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .forgot-password a {
+            color: #ff69b4;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .forgot-password a:hover {
+            color: #ff1493;
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        /* ส่วนของหน้าโหลด */
+        .loading-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #e0f7fa; /* สีฟ้าอ่อน */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+        }
+        .loading-page > div {
+            display: flex;
+            flex-direction: column; /* จัดเรียงองค์ประกอบในแนวดิ่ง */
+            align-items: center; /* จัดตรงกลางแนวนอน */
+            gap: 20px; /* ระยะห่างระหว่างองค์ประกอบ */
+        }
+        .loading-text {
+            font-size: 24px;
+            color: #00796b; /* สีเขียวทะเล */
+        }
+        .loading-bar-container {
+            width: 80%;
+            max-width: 400px;
+            height: 20px;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .loading-bar {
+            width: 0%;
+            height: 100%;
+            background-color: #ff69b4;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .loading-video {
+            width: 300px;
+        }
+        /* ส่วนของหน้า Happy Birthday */
+        .hbd-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fffaf0; /* สีครีมอ่อน */
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            text-align: center;
+            flex-direction: column; /* จัดเรียงเนื้อหาในแนวดิ่ง */
+        }
+        .hbd-content-container {
+            display: flex; /* เรียงแนวนอน */
+            gap: 20px; /* ระยะห่างระหว่างรูปภาพและวิดีโอ */
+            margin-bottom: 20px; /* ระยะห่างจากข้อความและปุ่ม */
+        }
+        .hbd-image,
+        .hbd-video {
+            width: 300px; /* ขนาดของรูปภาพและวิดีโอ */
+            border-radius: 10px; /* ขอบมน */
+        }
+        .hbd-text {
+            font-size: 28px;
+            color: #ff69b4;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ข้อความ */
+        }
+        .hbd-button {
+            width: 200px;
+            padding: 10px;
+            background-color: #ff69b4;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2); /* เพิ่มเงาให้ปุ่ม */
+        }
+        .hbd-button:hover {
+            background-color: #ff1493;
+        }
+        /* ส่วนของเพลง */
+        .audio-player {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            background-color: #ff69b4;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10000;
+        }
+        .audio-player svg {
+            width: 15px;
+            height: 15px;
+            fill: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- พื้นหลังเคลื่อนไหว -->
+    <div class="background-circle circle-1"></div>
+    <div class="background-circle circle-2"></div>
+    <!-- รูปภาพพื้นหลัง -->
+    <img src="https://i.imgur.com/VuaxBgX.png" alt="Background Bear" class="background-bear">
+    <!-- หน้าล็อกอิน -->
+    <div class="login-container">
+        <div class="login-box">
+            <h2>Welcome!</h2>
+            <p>Please log in to continue.</p>
+            <form class="login-form" id="loginForm">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="login-btn">Log In</button>
+                <p class="error-message" id="errorMessage">Incorrect username or password</p>
+            </form>
+            <p class="forgot-password"><a href="#">Forgot password?</a></p>
+        </div>
+    </div>
+    <!-- หน้าโหลด (วิดีโอและแถบโหลด) -->
+    <div class="loading-page" id="loadingPage">
+        <div>
+            <p class="loading-text">Loading...</p>
+            <div class="loading-bar-container">
+                <div class="loading-bar" id="loadingBar"></div>
+            </div>
+            <video class="loading-video" autoplay loop muted>
+                <source src="https://i.imgur.com/OHLIczs.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+    <!-- หน้า Happy Birthday -->
+    <div class="hbd-page" id="hbdPage">
+        <div class="hbd-content-container">
+            <img src="https://i.imgur.com/4Lp6xOE_d.jpeg?maxwidth=520&shape=thumb&fidelity=high" alt="Happy Birthday Image" class="hbd-image" id="hbdImage">
+            <video class="hbd-video" autoplay loop muted id="hbdVideo">
+                <source src="https://i.imgur.com/YUDxE1A.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p class="hbd-text" id="hbdText">Happy Birthday!</p>
+        <button class="hbd-button" onclick="switchContent()">Click Here</button>
+    </div>
+    <!-- เพลง -->
+    <audio id="bgMusic" loop autoplay>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <!-- ปุ่มควบคุมเพลง -->
+    <div class="audio-player" onclick="toggleMusic()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M14 3.23v17.54c0 .34-.17.66-.45.84l-6.5 4.17c-.28.18-.66.18-.94 0l-6.5-4.17c-.28-.18-.45-.5-.45-.84V3.23c0-.34.17-.66.45-.84l6.5-4.17c.28-.18.66-.18.94 0l6.5 4.17c.28.18.45.5.45.84zm-6 16.59V5.41l5.5-3.52v17.18l-5.5-3.52z"/>
+        </svg>
+    </div>
+    <script>
+        // กำหนดชื่อผู้ใช้และรหัสผ่านที่ถูกต้อง
+        const correctUsername = "tong";
+        const correctPassword = "240644";
+
+        // เลือกองค์ประกอบที่เกี่ยวข้อง
+        const loginForm = document.getElementById("loginForm");
+        const errorMessage = document.getElementById("errorMessage");
+        const loadingPage = document.getElementById("loadingPage");
+        const hbdPage = document.getElementById("hbdPage");
+        const loadingBar = document.getElementById("loadingBar");
+
+        // ฟังก์ชันตรวจสอบข้อมูลล็อกอิน
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // ป้องกันการโหลดหน้าใหม่
+            // รับค่าจากช่องกรอกข้อมูล
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            // ตรวจสอบว่าชื่อผู้ใช้และรหัสผ่านถูกต้องหรือไม่
+            if (username === correctUsername && password === correctPassword) {
+                // ซ่อนหน้าล็อกอินและแสดงหน้าโหลด
+                document.querySelector(".login-container").style.display = "none";
+                loadingPage.style.display = "flex";
+
+                // จำลองการโหลดเสร็จสิ้นภายใน 3 วินาที
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10; // เพิ่มค่าความคืบหน้าทีละ 10%
+                    loadingBar.style.width = `${progress}%`;
+                    if (progress >= 100) {
+                        clearInterval(interval); // หยุดการอัปเดตเมื่อโหลดเสร็จ
+                        setTimeout(() => {
+                            loadingPage.style.display = "none";
+                            hbdPage.style.display = "flex"; // แสดงหน้า HBD
+                        }, 500); // รอ 0.5 วินาทีก่อนเปลี่ยนหน้า
+                    }
+                }, 300); // อัปเดตทุก 300 มิลลิวินาที
+            } else {
+                // แสดงข้อความแจ้งเตือนหากข้อมูลไม่ถูกต้อง
+                errorMessage.style.display = "block";
+            }
+        });
+
+        // ฟังก์ชันสลับเนื้อหา
+        const texts = ["Happy Birthday na kub Tong 🤍", "🎉Wishing you all the best", "Thank You for Everything"];
+        const images = [
+            "https://i.imgur.com/4Lp6xOE_d.jpeg?maxwidth=520&shape=thumb&fidelity=high",
+            "https://i.imgur.com/yVRdffs_d.jpeg?maxwidth=520&shape=thumb&fidelity=high",
+            "https://i.imgur.com/L2MKOf3.jpeg"
+        ];
+        const videos = [
+            "https://i.imgur.com/YUDxE1A.mp4", // วิดีโอสำหรับ "Happy Birthday!"
+            "https://i.imgur.com/ihdKSfu.mp4", // วิดีโอสำหรับ "🎉 Enjoy Your Day!"
+            "" // ไม่มีวิดีโอสำหรับ "Thank You for Everything!"
+        ];
+
+        let currentIndex = 0;
+
+        function switchContent() {
+            currentIndex = (currentIndex + 1) % texts.length;
+
+            // อัปเดตข้อความ
+            document.getElementById("hbdText").textContent = texts[currentIndex];
+
+            // อัปเดตรูปภาพ
+            const imageElement = document.getElementById("hbdImage");
+            imageElement.src = images[currentIndex];
+            imageElement.style.display = "block"; // แสดงรูปภาพ
+
+            // อัปเดตวิดีโอ (ถ้ามี)
+            const videoElement = document.getElementById("hbdVideo");
+            if (currentIndex < videos.length && videos[currentIndex]) {
+                videoElement.src = videos[currentIndex];
+                videoElement.style.display = "block"; // แสดงวิดีโอ
+                videoElement.load(); // โหลดวิดีโอใหม่
+                videoElement.play(); // เล่นวิดีโอใหม่
+            } else {
+                videoElement.style.display = "none"; // ซ่อนวิดีโอ
+            }
+        }
+
+        // ฟังก์ชันควบคุมเพลง
+        const bgMusic = document.getElementById("bgMusic");
+        let isPlaying = true;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+            } else {
+                bgMusic.play();
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
