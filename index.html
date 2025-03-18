@@ -173,8 +173,13 @@
             border-radius: 10px;
             transition: width 0.3s ease;
         }
+        /* CSS สำหรับวิดีโอในหน้าโหลด */
         .loading-video {
-            width: 300px;
+            width: 80%; /* กำหนดเป็น % เพื่อให้ปรับขนาดตามหน้าจอ */
+            max-width: 400px; /* กำหนดขนาดสูงสุด */
+            height: auto; /* ให้ความสูงปรับตามสัดส่วน */
+            object-fit: cover; /* ครอบคลุมพื้นที่โดยไม่บิดเบือน */
+            border-radius: 10px; /* เพิ่มขอบมน */
         }
         /* ส่วนของหน้า Happy Birthday */
         .hbd-page {
@@ -198,7 +203,10 @@
         }
         .hbd-image,
         .hbd-video {
-            width: 300px; /* ขนาดของรูปภาพและวิดีโอ */
+            width: 80%; /* ขนาดของรูปภาพและวิดีโอ */
+            max-width: 400px; /* กำหนดขนาดสูงสุด */
+            height: auto; /* ให้ความสูงปรับตามสัดส่วน */
+            object-fit: cover; /* ครอบคลุมพื้นที่โดยไม่บิดเบือน */
             border-radius: 10px; /* ขอบมน */
         }
         .hbd-text {
@@ -311,27 +319,23 @@
         // กำหนดชื่อผู้ใช้และรหัสผ่านที่ถูกต้อง
         const correctUsername = "tong";
         const correctPassword = "240644";
-
         // เลือกองค์ประกอบที่เกี่ยวข้อง
         const loginForm = document.getElementById("loginForm");
         const errorMessage = document.getElementById("errorMessage");
         const loadingPage = document.getElementById("loadingPage");
         const hbdPage = document.getElementById("hbdPage");
         const loadingBar = document.getElementById("loadingBar");
-
         // ฟังก์ชันตรวจสอบข้อมูลล็อกอิน
         loginForm.addEventListener("submit", function (event) {
             event.preventDefault(); // ป้องกันการโหลดหน้าใหม่
             // รับค่าจากช่องกรอกข้อมูล
             const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value.trim();
-
             // ตรวจสอบว่าชื่อผู้ใช้และรหัสผ่านถูกต้องหรือไม่
             if (username === correctUsername && password === correctPassword) {
                 // ซ่อนหน้าล็อกอินและแสดงหน้าโหลด
                 document.querySelector(".login-container").style.display = "none";
                 loadingPage.style.display = "flex";
-
                 // จำลองการโหลดเสร็จสิ้นภายใน 3 วินาที
                 let progress = 0;
                 const interval = setInterval(() => {
@@ -350,7 +354,6 @@
                 errorMessage.style.display = "block";
             }
         });
-
         // ฟังก์ชันสลับเนื้อหา
         const texts = ["Happy Birthday na kub Tong 🤍", "🎉Wishing you all the best", "Thank You for Everything"];
         const images = [
@@ -363,20 +366,15 @@
             "https://i.imgur.com/ihdKSfu.mp4", // วิดีโอสำหรับ "🎉 Enjoy Your Day!"
             "" // ไม่มีวิดีโอสำหรับ "Thank You for Everything!"
         ];
-
         let currentIndex = 0;
-
         function switchContent() {
             currentIndex = (currentIndex + 1) % texts.length;
-
             // อัปเดตข้อความ
             document.getElementById("hbdText").textContent = texts[currentIndex];
-
             // อัปเดตรูปภาพ
             const imageElement = document.getElementById("hbdImage");
             imageElement.src = images[currentIndex];
             imageElement.style.display = "block"; // แสดงรูปภาพ
-
             // อัปเดตวิดีโอ (ถ้ามี)
             const videoElement = document.getElementById("hbdVideo");
             if (currentIndex < videos.length && videos[currentIndex]) {
@@ -388,11 +386,9 @@
                 videoElement.style.display = "none"; // ซ่อนวิดีโอ
             }
         }
-
         // ฟังก์ชันควบคุมเพลง
         const bgMusic = document.getElementById("bgMusic");
         let isPlaying = true;
-
         function toggleMusic() {
             if (isPlaying) {
                 bgMusic.pause();
